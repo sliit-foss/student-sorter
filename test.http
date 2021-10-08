@@ -1,0 +1,2 @@
+### Get All Getails
+GET http://127.0.0.1:5000/student/ HTTP/1.1
