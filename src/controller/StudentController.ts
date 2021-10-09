@@ -66,3 +66,24 @@ export const updateStudent = async (
     reply.code(ERROR500.CODE).send(new Error(err))
   }
 }
+
+//dekete student method
+export const deleteStudent = async (
+  request: studentRequest,
+  reply: FastifyReply,
+) => {
+  try {
+    const { id } = request.body
+    const deletedStudent = await prisma.student.delete({
+      where: {
+        id: Number(id),
+      },
+    })
+
+    reply.code(STANDARD.SUCCESS).send({
+      deletedStudent,
+    })
+  } catch (err) {
+    reply.code(ERROR500.CODE).send(new Error(err))
+  }
+}
