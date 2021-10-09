@@ -1,11 +1,26 @@
-### Get All Getails
+### Get All details
 GET http://127.0.0.1:5000/student/ HTTP/1.1
+
+### Get Single Student details
+GET http://127.0.0.1:5000/student/1 HTTP/1.1
 
 ### Add Student
 POST http://127.0.0.1:5000/student/ HTTP/1.1
 Content-Type: application/json
 
 {
+    "id":6,
+    "studentName":"ug",
+}
+
+### update Student
+PATCH  http://127.0.0.1:5000/student/ HTTP/1.1
+Content-Type: application/json
+
+{
     "id":2,
     "studentName":"Prasad",
 }
+
+### Delete Student
+DELETE  http://127.0.0.1:5000/student/1 HTTP/1.1

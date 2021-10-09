@@ -25,6 +25,12 @@ async function studentRouter(fastify: FastifyInstance) {
     url: '/student/:id',
     handler: controllers.deleteStudent,
   })
+
+  fastify.route({
+    method: 'GET',
+    url: '/student/:id',
+    handler: controllers.searchStudent,
+  })
 }
 
 export default studentRouter

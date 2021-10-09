@@ -67,7 +67,7 @@ export const updateStudent = async (
   }
 }
 
-//dekete student method
+//delete student method
 export const deleteStudent = async (
   request: studentRequest,
   reply: FastifyReply,
@@ -82,6 +82,28 @@ export const deleteStudent = async (
 
     reply.code(STANDARD.SUCCESS).send({
       deletedStudent,
+    })
+  } catch (err) {
+    reply.code(ERROR500.CODE).send(new Error(err))
+  }
+}
+
+//search student method
+export const searchStudent = async (
+  request: studentRequest,
+  reply: FastifyReply,
+) => {
+  try {
+    const { id } = request.body
+    const searchedStudent = await prisma.student.findUnique({
+      where: {
+        id: Number(id),
+      },
+    })
+    console.log(searchedStudent)
+
+    reply.code(STANDARD.SUCCESS).send({
+      searchStudent,
     })
   } catch (err) {
     reply.code(ERROR500.CODE).send(new Error(err))
