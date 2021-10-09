@@ -15,7 +15,7 @@ async function studentRouter(fastify: FastifyInstance) {
   })
 
   fastify.route({
-    method: 'patch',
+    method: 'PATCH',
     url: '/student/:id',
     handler: controllers.updateStudent,
   })

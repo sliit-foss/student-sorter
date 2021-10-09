@@ -6,7 +6,6 @@ import { ERROR500 } from '../util/response'
 
 export const prisma = new PrismaClient()
 
-
 //getAll Student method
 export const getAllStudent = async (
   request: studentRequest,
@@ -23,24 +22,19 @@ export const getAllStudent = async (
   }
 }
 
-
 //add student method
 export const addStudent = async (
   request: studentRequest,
   reply: FastifyReply,
 ) => {
   try {
-
-    const {
-      id,
-      studentName
-    } = request.body
+    const { id, studentName } = request.body
 
     const data = await prisma.student.create({
       data: {
         id,
-        studentName
-      }
+        studentName,
+      },
     })
 
     reply.code(STANDARD.SUCCESS).send({
@@ -51,20 +45,19 @@ export const addStudent = async (
   }
 }
 
-
 //update student method
 export const updateStudent = async (
   request: studentRequest,
   reply: FastifyReply,
 ) => {
   try {
-    const { id } = request.body;
-    const student = await prisma.student.update({
+    const { id } = request.body
+    const data = await prisma.student.update({
       where: {
         id: Number(id),
       },
       data: request.body,
-    });
+    })
 
     reply.code(STANDARD.SUCCESS).send({
       data,
