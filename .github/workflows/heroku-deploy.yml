@@ -1,4 +1,4 @@
-name: heroku deploy
+name: Heroku deploy
 on:
   workflow_run:
     workflows: [ "CI build" ]
