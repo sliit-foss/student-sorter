@@ -1,18 +1,17 @@
 import { FastifyReply } from 'fastify'
-import { studentRequest } from '../interface/inex'
+import { userRequest } from '../interface'
 import { PrismaClient } from '@prisma/client'
 import { ERROR400, STANDARD } from '../util/response'
 import { ERROR500 } from '../util/response'
 
 export const prisma = new PrismaClient()
 
-//getAll Student method
-export const getAllStudent = async (
-  request: studentRequest,
+export const getAllUsers = async (
+  request: userRequest,
   reply: FastifyReply,
 ) => {
   try {
-    const data = await prisma.student.findMany({})
+    const data = await prisma.user.findMany({})
 
     reply.code(STANDARD.SUCCESS).send({
       data,
@@ -22,18 +21,18 @@ export const getAllStudent = async (
   }
 }
 
-//add student method
-export const addStudent = async (
-  request: studentRequest,
+export const addUser = async (
+  request: userRequest,
   reply: FastifyReply,
 ) => {
   try {
-    const { id, studentName } = request.body
+    const { id, username, email } = request.body
 
-    const data = await prisma.student.create({
+    const data = await prisma.user.create({
       data: {
         id,
-        studentName,
+        username,
+        email,
       },
     })
 
@@ -45,14 +44,13 @@ export const addStudent = async (
   }
 }
 
-//update student method
-export const updateStudent = async (
-  request: studentRequest,
+export const updateUser = async (
+  request: userRequest,
   reply: FastifyReply,
 ) => {
   try {
     const { id } = request.body
-    const data = await prisma.student.update({
+    const data = await prisma.user.update({
       where: {
         id: Number(id),
       },
@@ -67,43 +65,40 @@ export const updateStudent = async (
   }
 }
 
-//delete student method
-export const deleteStudent = async (
-  request: studentRequest,
+export const deleteUser = async (
+  request: userRequest,
   reply: FastifyReply,
 ) => {
   try {
     const { id } = request.body
-    const deletedStudent = await prisma.student.delete({
+    const deletedUser = await prisma.user.delete({
       where: {
         id: Number(id),
       },
     })
 
     reply.code(STANDARD.SUCCESS).send({
-      deletedStudent,
+      deletedUser,
     })
   } catch (err) {
     reply.code(ERROR500.CODE).send(new Error(err))
   }
 }
 
-//search student method
-export const searchStudent = async (
-  request: studentRequest,
+export const searchUser = async (
+  request: userRequest,
   reply: FastifyReply,
 ) => {
   try {
     const { id } = request.body
-    const searchedStudent = await prisma.student.findUnique({
+    const searchResults = await prisma.user.findUnique({
       where: {
         id: Number(id),
       },
     })
-    console.log(searchedStudent)
 
     reply.code(STANDARD.SUCCESS).send({
-      searchStudent,
+      searchResults,
     })
   } catch (err) {
     reply.code(ERROR500.CODE).send(new Error(err))

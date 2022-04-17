@@ -1,0 +1,12 @@
+{
+    "mixers": [
+      {
+          "input": [
+              "./prisma/base.prisma",
+              "./src/models/user.prisma",
+              "./src/models/chatroom.prisma"
+          ],
+          "output": "./prisma/schema.prisma"
+      }
+    ]
+  }
