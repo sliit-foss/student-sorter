@@ -1,5 +1,6 @@
 model User {
-  id Int @id
+  id Int @id 
   username String
   email String
+  created_at  DateTime   @default(now())
 }

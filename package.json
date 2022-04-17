@@ -5,10 +5,14 @@
   "main": "index.js",
   "scripts": {
     "prismix": "npx prismix && prisma format && npx prisma generate",
+    "migrate": "npm run prismix && npx prisma migrate dev --name initial_migration",
     "build": "npm run prismix && tsc -p tsconfig.json",
     "start": "npm run prismix && node build/server.js",
     "dev": "npm run prismix && nodemon --config nodemon.json src/server.ts",
     "dev:debug": "npm run prismix && nodemon --config nodemon.json --inspect-brk src/server.ts"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seeders/databaseSeeder.ts"
   },
   "repository": {
     "type": "git",

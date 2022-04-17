@@ -1,4 +1,6 @@
 model Chatroom {
-  id Int @id
+  id Int @id @default(autoincrement())
   name String
+  description String
+  created_at  DateTime   @default(now())
 }

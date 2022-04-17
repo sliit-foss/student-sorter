@@ -18,7 +18,7 @@ fastifyServer.register(swagger, {
 })
 
 routes.forEach((route) => {
-  fastifyServer.register(route)
+  fastifyServer.register(route, { prefix: 'api/v1' })
 })
 
 const PORT = 5000
