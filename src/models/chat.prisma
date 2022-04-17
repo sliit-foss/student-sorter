@@ -1,0 +1,19 @@
+model Chat {
+  id Int @id @default(autoincrement())
+  message String
+  user_id String
+  user    User @relation(fields: [user_id], references: [id])
+  chatroom_id Int
+  chatroom    Chatroom @relation(fields: [chatroom_id], references: [id])
+  created_at  DateTime   @default(now())
+}
+
+model Chatroom {
+  id Int @id @default(autoincrement())
+  chats  Chat[]
+}
+
+model User {
+  id String @id
+  chats  Chat[]
+}

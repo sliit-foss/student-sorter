@@ -1,10 +1,10 @@
 import { FastifyReply } from 'fastify'
 import { userRequest } from '../interface'
 import { PrismaClient } from '@prisma/client'
-import { ERROR400, STANDARD } from '../util/response'
-import { ERROR500 } from '../util/response'
+import { decodeToken } from '../util/firebase'
+import { ERROR500, STANDARD } from '../util/response'
 
-export const prisma = new PrismaClient()
+const prisma = new PrismaClient()
 
 export const getAllUsers = async (
   request: userRequest,
@@ -12,7 +12,6 @@ export const getAllUsers = async (
 ) => {
   try {
     const data = await prisma.user.findMany({})
-
     reply.code(STANDARD.SUCCESS).send({
       data,
     })
@@ -21,38 +20,38 @@ export const getAllUsers = async (
   }
 }
 
-export const addUser = async (
-  request: userRequest,
-  reply: FastifyReply,
-) => {
+export const addUser = async (request: userRequest, reply: FastifyReply) => {
   try {
-    const { id, username, email } = request.body
-
-    const data = await prisma.user.create({
-      data: {
-        id,
-        username,
-        email,
+    const decodedToken = (await decodeToken(request)).data
+    const user = await prisma.user.findUnique({
+      where: {
+        id: decodedToken.uid,
       },
     })
-
+    if (!user) {
+      await prisma.user.create({
+        data: {
+          id: decodedToken.uid,
+          username: decodedToken.name,
+          email: decodedToken.email,
+          picture: decodedToken.picture,
+        },
+      })
+    }
     reply.code(STANDARD.SUCCESS).send({
-      data,
+      message: 'User added successfully',
     })
   } catch (err) {
     reply.code(ERROR500.CODE).send(new Error(err))
   }
 }
 
-export const updateUser = async (
-  request: userRequest,
-  reply: FastifyReply,
-) => {
+export const updateUser = async (request: userRequest, reply: FastifyReply) => {
   try {
     const { id } = request.body
     const data = await prisma.user.update({
       where: {
-        id: Number(id),
+        id: id,
       },
       data: request.body,
     })
@@ -65,18 +64,14 @@ export const updateUser = async (
   }
 }
 
-export const deleteUser = async (
-  request: userRequest,
-  reply: FastifyReply,
-) => {
+export const deleteUser = async (request: userRequest, reply: FastifyReply) => {
   try {
     const { id } = request.body
     const deletedUser = await prisma.user.delete({
       where: {
-        id: Number(id),
+        id: id,
       },
     })
-
     reply.code(STANDARD.SUCCESS).send({
       deletedUser,
     })
@@ -85,18 +80,14 @@ export const deleteUser = async (
   }
 }
 
-export const searchUser = async (
-  request: userRequest,
-  reply: FastifyReply,
-) => {
+export const searchUser = async (request: userRequest, reply: FastifyReply) => {
   try {
     const { id } = request.body
     const searchResults = await prisma.user.findUnique({
       where: {
-        id: Number(id),
+        id: id,
       },
     })
-
     reply.code(STANDARD.SUCCESS).send({
       searchResults,
     })

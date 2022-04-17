@@ -4,7 +4,8 @@
           "input": [
               "./prisma/base.prisma",
               "./src/models/user.prisma",
-              "./src/models/chatroom.prisma"
+              "./src/models/chatroom.prisma",
+              "./src/models/chat.prisma"
           ],
           "output": "./prisma/schema.prisma"
       }

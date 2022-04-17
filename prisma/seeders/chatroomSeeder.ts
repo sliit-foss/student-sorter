@@ -35,14 +35,14 @@ export default class ChatroomSeeder {
       name: 'Year 4 Semester 1',
       description: 'Chatroom for year 4 semester 1 students',
     },
+    {
+      name: 'Year 4 Semester 2',
+      description: 'Chatroom for year 4 semester 2 students',
+    },
   ]
   static async seed() {
-    await Promise.all(
-      this.data.map(async (chatroom) => {
-        await this.prismaClient.chatroom.create({
-          data: chatroom,
-        })
-      }),
-    )
+    const chatrooms = await this.prismaClient.chatroom.findMany()
+    if (chatrooms.length === 0)
+      await this.prismaClient.chatroom.createMany({ data: this.data })
   }
 }

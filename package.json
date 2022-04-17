@@ -6,13 +6,12 @@
   "scripts": {
     "prismix": "npx prismix && prisma format && npx prisma generate",
     "migrate": "npm run prismix && npx prisma migrate dev --name initial_migration",
+    "seed": "ts-node prisma/seeders/index.ts",
+    "init": "npm run migrate && npm run seed",
     "build": "npm run prismix && tsc -p tsconfig.json",
     "start": "npm run prismix && node build/server.js",
     "dev": "npm run prismix && nodemon --config nodemon.json src/server.ts",
     "dev:debug": "npm run prismix && nodemon --config nodemon.json --inspect-brk src/server.ts"
-  },
-  "prisma": {
-    "seed": "ts-node prisma/seeders/databaseSeeder.ts"
   },
   "repository": {
     "type": "git",
@@ -29,7 +28,9 @@
     "@prisma/client": "^3.12.0",
     "dotenv": "^16.0.0",
     "fastify": "^3.22.0",
+    "fastify-cors": "^6.0.3",
     "fastify-swagger": "^4.12.4",
+    "firebase-admin": "^10.0.2",
     "prismix": "^1.0.21"
   },
   "devDependencies": {

@@ -1,7 +1,15 @@
 import fastify from 'fastify'
+import fastifyCors from 'fastify-cors'
 import swagger from 'fastify-swagger'
 import routes from './routes'
+import admin from 'firebase-admin'
 import 'dotenv/config'
+
+var serviceAccount = process.env.SERVICE_ACCOUNT_KEY ? JSON.parse(Buffer.from(process.env.SERVICE_ACCOUNT_KEY , 'base64').toString()) :  require("./serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 const fastifyServer = fastify({ logger: true })
 
@@ -17,11 +25,15 @@ fastifyServer.register(swagger, {
   },
 })
 
+fastifyServer.register(fastifyCors, { 
+  origin: '*',
+})
+
 routes.forEach((route) => {
   fastifyServer.register(route, { prefix: 'api/v1' })
 })
 
-const PORT = 5000
+const PORT = process.env.PORT || 5000
 
 const start = async () => {
   fastifyServer.listen(PORT, (err, address) => {
