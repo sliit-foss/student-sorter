@@ -1,25 +1,39 @@
 import fastify from 'fastify'
+import fastifyCors from 'fastify-cors'
 import swagger from 'fastify-swagger'
-import student from './routes/student'
+import routes from './routes'
+import admin from 'firebase-admin'
+import 'dotenv/config'
+
+var serviceAccount = process.env.SERVICE_ACCOUNT_KEY ? JSON.parse(Buffer.from(process.env.SERVICE_ACCOUNT_KEY , 'base64').toString()) :  require("./serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 const fastifyServer = fastify({ logger: true })
 
-fastifyServer.register(swagger),
-  {
-    exposeRoute: true,
-    routePrefix: '/docs',
-    swagger: {
-      info: {
-        title: 'Fastify API',
-        version: '1.0.0',
-        description: 'Student Sorter',
-      },
+fastifyServer.register(swagger, {
+  exposeRoute: true,
+  routePrefix: '/docs',
+  swagger: {
+    info: {
+      title: 'Fastify API',
+      version: '1.0.0',
+      description: 'Student Sorter',
     },
-  }
+  },
+})
 
-fastifyServer.register(student)
+fastifyServer.register(fastifyCors, { 
+  origin: '*',
+})
 
-const PORT = 5000
+routes.forEach((route) => {
+  fastifyServer.register(route, { prefix: 'api/v1' })
+})
+
+const PORT = process.env.PORT || 5000
 
 const start = async () => {
   fastifyServer.listen(PORT, (err, address) => {
@@ -30,5 +44,10 @@ const start = async () => {
     console.log(`Server listening at ${address}`)
   })
 }
+
+fastifyServer.ready((err) => {
+  if (err) throw err
+  fastifyServer.swagger()
+})
 
 start()
