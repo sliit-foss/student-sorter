@@ -3,39 +3,43 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export const getAllUsersData = async () => {
-  const data = prisma.user.findMany({})
-  return data
+  return prisma.user.findMany({})
 }
 
-export const findUserData = async (decodedToken) => {
+export const findUserById = async (id) => {
   return prisma.user.findUnique({
     where: {
-      id: decodedToken.uid,
+      // id: decodedToken.uid,
+      id:id,
     },
   })
 }
 
-export const createUserData = async (decodedToken) => {
+export const createUserData = async (id, username, email, picture) => {
   return prisma.user.create({
     data: {
-      id: decodedToken.uid,
-      username: decodedToken.name,
-      email: decodedToken.email,
-      picture: decodedToken.picture,
+      id: id,
+      username: username,
+      email: email,
+      picture: picture,
     },
   })
 }
 
-export const updateUserData = async (request, id) => {
+export const updateUserData = async (id, username, email, picture) => {
   return prisma.user.update({
     where: {
       id: id,
     },
-    data: request.body,
+    data: {
+      username: username,
+      email: email,
+      picture: picture,
+    },
   })
 }
 
-export const deleteUserData = async (id) => {
+export const deleteUserById = async (id) => {
   return prisma.user.delete({
     where: {
       id: id,
@@ -43,7 +47,7 @@ export const deleteUserData = async (id) => {
   })
 }
 
-export const searchUserData = async (id) => {
+export const searchUserById = async (id) => {
   return prisma.user.findUnique({
     where: {
       id: id,
