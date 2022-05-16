@@ -19,9 +19,9 @@ export const getAllUsers = async (
   reply: FastifyReply,
 ) => {
   try {
-    await getUsers()
+    const data = await getUsers()
     reply.code(STANDARD.SUCCESS).send({
-      getUsers,
+      data,
     })
   } catch (err) {
     reply.code(ERROR500.CODE).send(new Error(err))
@@ -31,7 +31,7 @@ export const getAllUsers = async (
 export const addUser = async (request: userRequest, reply: FastifyReply) => {
   try {
     const decodedToken = (await decodeToken(request)).data
-    const user = await findUser(decodedToken)
+    const user = await findUser(decodedToken.uid);
 
     if (!user) {
       await createUser(decodedToken)
@@ -46,8 +46,11 @@ export const addUser = async (request: userRequest, reply: FastifyReply) => {
 
 export const updateUser = async (request: userRequest, reply: FastifyReply) => {
   try {
-    const { id } = request.body
-    const data = await userUpdate(request, id)
+    const { id } = request.body;
+    const {username} = request.body;
+    const {email} = request.body;
+    const {picture} = request.body;
+    const data = await userUpdate(id, username, email, picture);
     reply.code(STANDARD.SUCCESS).send({
       data,
     })
