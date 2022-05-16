@@ -3,6 +3,14 @@ import { userRequest } from '../interface'
 import { PrismaClient } from '@prisma/client'
 import { decodeToken } from '../util/firebase'
 import { ERROR500, STANDARD } from '../util/response'
+import {
+  getUsers,
+  findUser,
+  createUser,
+  userUpdate,
+  userDelete,
+  userSearch,
+} from '../services/users'
 
 const prisma = new PrismaClient()
 
@@ -11,9 +19,9 @@ export const getAllUsers = async (
   reply: FastifyReply,
 ) => {
   try {
-    const data = await prisma.user.findMany({})
+    await getUsers()
     reply.code(STANDARD.SUCCESS).send({
-      data,
+      getUsers,
     })
   } catch (err) {
     reply.code(ERROR500.CODE).send(new Error(err))
@@ -23,20 +31,10 @@ export const getAllUsers = async (
 export const addUser = async (request: userRequest, reply: FastifyReply) => {
   try {
     const decodedToken = (await decodeToken(request)).data
-    const user = await prisma.user.findUnique({
-      where: {
-        id: decodedToken.uid,
-      },
-    })
+    const user = await findUser(decodedToken)
+
     if (!user) {
-      await prisma.user.create({
-        data: {
-          id: decodedToken.uid,
-          username: decodedToken.name,
-          email: decodedToken.email,
-          picture: decodedToken.picture,
-        },
-      })
+      await createUser(decodedToken)
     }
     reply.code(STANDARD.SUCCESS).send({
       message: 'User added successfully',
@@ -49,13 +47,7 @@ export const addUser = async (request: userRequest, reply: FastifyReply) => {
 export const updateUser = async (request: userRequest, reply: FastifyReply) => {
   try {
     const { id } = request.body
-    const data = await prisma.user.update({
-      where: {
-        id: id,
-      },
-      data: request.body,
-    })
-
+    const data = await userUpdate(request, id)
     reply.code(STANDARD.SUCCESS).send({
       data,
     })
@@ -67,11 +59,7 @@ export const updateUser = async (request: userRequest, reply: FastifyReply) => {
 export const deleteUser = async (request: userRequest, reply: FastifyReply) => {
   try {
     const { id } = request.body
-    const deletedUser = await prisma.user.delete({
-      where: {
-        id: id,
-      },
-    })
+    const deletedUser = await userDelete(id)
     reply.code(STANDARD.SUCCESS).send({
       deletedUser,
     })
@@ -83,11 +71,7 @@ export const deleteUser = async (request: userRequest, reply: FastifyReply) => {
 export const searchUser = async (request: userRequest, reply: FastifyReply) => {
   try {
     const { id } = request.body
-    const searchResults = await prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-    })
+    const searchResults = await userSearch(id)
     reply.code(STANDARD.SUCCESS).send({
       searchResults,
     })
