@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { PrismaClient } from '@prisma/client'
 import { ERROR500, STANDARD } from '../util/response'
+import { getChatrooms } from '../services/chatroom'
 
 const prisma = new PrismaClient()
 
@@ -9,11 +10,7 @@ export const getAllChatrooms = async (
   reply: FastifyReply,
 ) => {
   try {
-    const data = await prisma.chatroom.findMany({
-      orderBy: {
-        name: 'asc',
-      },
-    })
+    const data = await getChatrooms()
     reply.code(STANDARD.SUCCESS).send({
       data,
     })
