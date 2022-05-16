@@ -1,33 +1,38 @@
 import {
   getAllUsersData,
-  findUserData,
+  findUserById,
   createUserData,
   updateUserData,
-  deleteUserData,
-  searchUserData,
+  deleteUserById,
+  searchUserById,
 } from '../repositories/users'
 
 export const getUsers = async () => {
-  const getUserData = await getAllUsersData()
-  return getUserData
+  return getAllUsersData()
 }
 
-export const findUser = async (decodedToken) => {
-  return findUserData(decodedToken)
+export const findUser = async (id) => {
+  return findUserById(id);
 }
 
 export const createUser = async (decodedToken) => {
-  return createUserData(decodedToken)
+
+  const id = decodedToken.id;
+  const username = decodedToken.username;
+  const email = decodedToken.email;
+  const picture = decodedToken.picture;
+  
+  return createUserData(id, username, email, picture);
 }
 
-export const userUpdate = async (request, id) => {
-  return updateUserData(request, id)
+export const userUpdate = async (id, username, email, picture) => {
+  return updateUserData(id, username, email, picture);
 }
 
 export const userDelete = async (id) => {
-  return deleteUserData(id)
+  return deleteUserById(id)
 }
 
 export const userSearch = async (id) => {
-  return searchUserData(id)
+  return searchUserById(id)
 }
