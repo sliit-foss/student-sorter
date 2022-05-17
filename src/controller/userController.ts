@@ -46,10 +46,8 @@ export const addUser = async (request: userRequest, reply: FastifyReply) => {
 
 export const updateUser = async (request: userRequest, reply: FastifyReply) => {
   try {
-    const { id } = request.body;
-    const {username} = request.body;
-    const {email} = request.body;
-    const {picture} = request.body;
+    const id = request.params.id;
+    const {username, email, picture} = request.body;
     const data = await userUpdate(id, username, email, picture);
     reply.code(STANDARD.SUCCESS).send({
       data,
@@ -73,7 +71,7 @@ export const deleteUser = async (request: userRequest, reply: FastifyReply) => {
 
 export const searchUser = async (request: userRequest, reply: FastifyReply) => {
   try {
-    const { id } = request.body
+    const {id} = request.params;
     const searchResults = await userSearch(id)
     reply.code(STANDARD.SUCCESS).send({
       searchResults,
