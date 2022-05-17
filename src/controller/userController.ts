@@ -59,7 +59,7 @@ export const updateUser = async (request: userRequest, reply: FastifyReply) => {
 
 export const deleteUser = async (request: userRequest, reply: FastifyReply) => {
   try {
-    const { id } = request.body
+    const { id } = request.params
     const deletedUser = await userDelete(id)
     reply.code(STANDARD.SUCCESS).send({
       deletedUser,
