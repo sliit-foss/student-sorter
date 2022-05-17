@@ -9,8 +9,7 @@ export const getAllUsersData = async () => {
 export const findUserById = async (id) => {
   return prisma.user.findUnique({
     where: {
-      // id: decodedToken.uid,
-      id:id,
+      id,
     },
   })
 }
@@ -42,7 +41,7 @@ export const updateUserData = async (id, username, email, picture) => {
 export const deleteUserById = async (id) => {
   return prisma.user.delete({
     where: {
-      id: id,
+      id,
     },
   })
 }
