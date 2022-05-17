@@ -43,6 +43,8 @@ export default class ChatroomSeeder {
   static async seed() {
     const chatrooms = await this.prismaClient.chatroom.findMany()
     if (chatrooms.length === 0)
-      await this.prismaClient.chatroom.createMany({ data: this.data })
+      this.data.forEach(async (chatroom) => {
+        await this.prismaClient.chatroom.create({ data: chatroom })
+      })
   }
 }

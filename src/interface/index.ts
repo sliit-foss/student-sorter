@@ -10,4 +10,5 @@ export interface userInterface {
 
 export interface userRequest extends FastifyRequest {
   body: Prisma.UserCreateInput
+  params: {id: string}
 }

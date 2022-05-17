@@ -5,6 +5,12 @@ export const decodeToken = async (request: FastifyRequest) => {
   const token = request.headers.authorization
     ? request.headers.authorization.replace('Bearer ', '')
     : null
+  if (!token)
+    return {
+      success: false,
+      data: null,
+      error: 'Missing auth token',
+    }
   return await auth()
     .verifyIdToken(token)
     .then((decodedToken) => {
