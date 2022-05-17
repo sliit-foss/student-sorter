@@ -17,10 +17,7 @@ export const findUser = async (id) => {
 
 export const createUser = async (decodedToken) => {
 
-  const id = decodedToken.id;
-  const username = decodedToken.username;
-  const email = decodedToken.email;
-  const picture = decodedToken.picture;
+  const {id, username, email, picture} = decodedToken.value;
   
   return createUserData(id, username, email, picture);
 }
