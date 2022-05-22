@@ -34,7 +34,7 @@ routes.forEach((route) => {
 })
 
 const start = async () => {
-  fastifyServer.listen(process.env.PORT || 5000, (err, address) => {
+  fastifyServer.listen(process.env.PORT || 5000, process.env.HOST || '0.0.0.0', (err, address) => {
     if (err) {
       console.error(err)
       process.exit(1)
