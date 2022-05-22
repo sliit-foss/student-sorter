@@ -9,7 +9,7 @@
     "seed": "ts-node prisma/seeders/index.ts",
     "init": "npm run migrate && npm run seed",
     "build": "npm run prismix && tsc -p tsconfig.json",
-    "start": "npm run prismix && node build/server.js",
+    "start": "npm run prismix && node build/src/server.js",
     "dev": "npm run prismix && nodemon --config nodemon.json src/server.ts",
     "dev:debug": "npm run prismix && nodemon --config nodemon.json --inspect-brk src/server.ts"
   },
