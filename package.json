@@ -2,7 +2,11 @@
   "name": "student-sorter",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/src/index.js",
+  "engines": {
+    "node": ">=16",
+    "npm": ">=8"
+  },
   "scripts": {
     "prismix": "npx prismix && prisma format && npx prisma generate",
     "migrate": "npm run prismix && npx prisma migrate dev --name initial_migration",
