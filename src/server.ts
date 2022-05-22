@@ -33,10 +33,8 @@ routes.forEach((route) => {
   fastifyServer.register(route, { prefix: 'api/v1' })
 })
 
-const PORT = process.env.PORT || 5000
-
 const start = async () => {
-  fastifyServer.listen(PORT, (err, address) => {
+  fastifyServer.listen(process.env.PORT || 5000, (err, address) => {
     if (err) {
       console.error(err)
       process.exit(1)
