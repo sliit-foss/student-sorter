@@ -34,7 +34,7 @@
     "fastify": "^3.29.4",
     "fastify-cors": "^6.0.3",
     "fastify-swagger": "^4.12.4",
-    "firebase-admin": "^10.0.2",
+    "firebase-admin": "^11.4.1",
     "prismix": "^1.0.21"
   },
   "devDependencies": {
